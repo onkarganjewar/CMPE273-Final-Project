@@ -15,6 +15,40 @@ import redis.clients.jedis.Jedis;
 
 public class Client{
 
+
+public static enum Mode {
+		    ALPHA, ALPHANUMERIC, NUMERIC 
+		}
+
+public static String generateRandomString(int length, Mode mode) throws Exception {
+
+	StringBuffer buffer = new StringBuffer();
+	String characters = "";
+
+	switch(mode){
+	
+	case ALPHA:
+		characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		break;
+	
+	case ALPHANUMERIC:
+		characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		break;
+
+	case NUMERIC:
+		characters = "1234567890";
+	    break;
+	}
+	
+	int charactersLength = characters.length();
+
+	for (int i = 0; i < length; i++) {
+		double index = Math.random() * charactersLength;
+		buffer.append(characters.charAt((int) index));
+	}
+	return buffer.toString();
+}
+
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
 
@@ -32,8 +66,16 @@ public class Client{
 
 			String dred = d.toString();
 
-
-
+	    	ArrayList<String> data = new ArrayList<String>();
+	    	
+			for(int i=0;i<600;i++){
+			String tempp = generateRandomString(10,Mode.ALPHANUMERIC);
+		//	System.out.println(generateRandomString(10,Mode.ALPHANUMERIC));
+			data.add(tempp);
+			//System.out.println(generateRandomString(10,Mode.ALPHANUMERIC));
+			}
+			//System.out.println(data);
+			
 
 
 			al.add(a);
@@ -42,24 +84,24 @@ public class Client{
 	        al.add(d);
 
 	        ArrayList<String> values = new ArrayList<String>();
-
-			Scanner sc1 = new Scanner (System.in);
+	    	
+	      /*  Scanner sc1 = new Scanner (System.in);
 			Scanner sc2 = new Scanner (System.in);
 			System.out.print("No of keys you want to enter: ");
-			int no = sc1.nextInt();
+			int no = sc1.nextInt(); 
 			for(int i=0;i<no;i++){
 				System.out.println("Enter Value for ["+(i+1)+"] key :");
-				values.add(sc2.nextLine());
+				values.add(sc2.nextLine()); 
 				System.out.println("Inserted!!\n");
 			}
+		*/
 
 
-
-			String outputFile = "final.csv";
+			String outputFile = "final2.csv";
 			// String outputFile = "/Applications/XAMPP/xamppfiles/htdocs/cmpe273/proj.csv";
 	    	boolean alreadyExists = new File(outputFile).exists();
 	    	CsvWriter csvOutput = new CsvWriter(new FileWriter(outputFile, true), ',');
-	    	CsvReader csreader = new CsvReader("final.csv");
+	    	CsvReader csreader = new CsvReader("final2.csv");
 
 	    //	System.out.println(csreader.readHeaders());
 	    	if (!alreadyExists)
@@ -81,9 +123,9 @@ public class Client{
 	        int ccc = 0;
 	        int ddd = 0;
     ConsistentH<Jedis> consistentHash = new ConsistentH<Jedis>(hf, 100, al);
-	        for (String val : values) {
+	     //   for (String val : values) {
 	        	 // System.out.println("userid is "+val);
-
+	        	for (String val : data) {
 	        //	System.out.println(consistentHash.get(val).toString());
 	        	String temp = consistentHash.get(val).toString();
 	        	String temp1 = csreader.get("node");
@@ -102,7 +144,7 @@ public class Client{
 	            					b.set(Integer.toString(bc),val);
 	            					bc++;
 	            					bcc++;
-
+	            					
 	            				}
 	            				else if(temp.equalsIgnoreCase(cred))
 	            					{
@@ -144,4 +186,10 @@ public class Client{
 
 	        csvOutput.close();
 	}
+
+
+
 }
+
+	
+
