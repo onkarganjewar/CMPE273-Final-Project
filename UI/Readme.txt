@@ -1,7 +1,7 @@
 ﻿In this Sample
 -----------------------------
 Added new pages
-  Playlists.html - Added dynamic accordions
-TemplatePage.html - Updated to reflect new changes
+  Admin.html - Dashboard
+opencsv.php - Parse the csv files
+chart.php - Pie chart for load of all the nodes within the system
 
-Added Font Awesome
