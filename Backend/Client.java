@@ -57,15 +57,23 @@ public static String generateRandomString(int length, Mode mode) throws Exceptio
 			Jedis b = new Jedis("127.0.0.1",6388);
 			Jedis c = new Jedis("127.0.0.1",6389);
 			Jedis d = new Jedis("127.0.0.1",6390);
+			Jedis e = new Jedis("127.0.0.1",6392);
 
 			String ared = a.toString();
 
 			String bred = b.toString();
 
 			String cred = c.toString();
-
 			String dred = d.toString();
+			String ered = e.toString();
 
+			al.add(a);
+	        al.add(b);
+	        al.add(c);
+	        al.add(d);
+	        al.add(e);
+		    
+			
 	    	ArrayList<String> data = new ArrayList<String>();
 	    	
 			for(int i=0;i<600;i++){
@@ -75,14 +83,50 @@ public static String generateRandomString(int length, Mode mode) throws Exceptio
 			//System.out.println(generateRandomString(10,Mode.ALPHANUMERIC));
 			}
 			//System.out.println(data);
+			System.out.println("These are the instances running right now ");
+			System.out.println("1]6377 2]6388 3]6389  4]6390  5]6392");
+			System.out.println("Do you want to remove any node from the system? 1.Yes 2.No");
+			Scanner sc2 = new Scanner (System.in);
+			String tep = sc2.nextLine();
 			
+			while (tep.equalsIgnoreCase("yes"))
+			{
+			System.out.print("Enter the port no of instance that you want to delete: ");
+			Scanner sc3 = new Scanner (System.in);
+				switch(sc3.nextLine())
+				{
+				case "6377" : al.remove(a);
+								break;
+								
 
+				case "6388" : al.remove(b);
+								break;
+			
+				case "6389" : al.remove(c);
+				break;
+					
 
-			al.add(a);
-	        al.add(b);
-	        al.add(c);
-	        al.add(d);
+				case "6390" : al.remove(d);
+								break;
+								
 
+				case "6392" : al.remove(e);
+								break;
+							
+								
+				}
+				tep = "no";
+
+			}
+
+			
+					
+					System.out.println("out of the loop");
+					
+					
+					
+
+		    
 	        ArrayList<String> values = new ArrayList<String>();
 	    	
 	      /*  Scanner sc1 = new Scanner (System.in);
@@ -97,11 +141,11 @@ public static String generateRandomString(int length, Mode mode) throws Exceptio
 		*/
 
 
-			String outputFile = "final2.csv";
+			String outputFile = "final.csv";
 			// String outputFile = "/Applications/XAMPP/xamppfiles/htdocs/cmpe273/proj.csv";
 	    	boolean alreadyExists = new File(outputFile).exists();
 	    	CsvWriter csvOutput = new CsvWriter(new FileWriter(outputFile, true), ',');
-	    	CsvReader csreader = new CsvReader("final2.csv");
+	    	CsvReader csreader = new CsvReader("final.csv");
 
 	    //	System.out.println(csreader.readHeaders());
 	    	if (!alreadyExists)
@@ -118,10 +162,14 @@ public static String generateRandomString(int length, Mode mode) throws Exceptio
 	        int bc = 1;
 	        int cc = 1;
 	        int dc = 1;
+	        int ec = 1;
+	        
 	        int acc = 0;
 	        int bcc = 0;
 	        int ccc = 0;
 	        int ddd = 0;
+	        int eee = 0;
+	        
     ConsistentH<Jedis> consistentHash = new ConsistentH<Jedis>(hf, 100, al);
 	     //   for (String val : values) {
 	        	 // System.out.println("userid is "+val);
@@ -132,7 +180,7 @@ public static String generateRandomString(int length, Mode mode) throws Exceptio
 
 	        	if(temp.equalsIgnoreCase(ared))
 	            			{
-
+	        	
 	            				a.set(Integer.toString(ac), val );
 	            				acc++;
 	            				ac++;
@@ -160,6 +208,15 @@ public static String generateRandomString(int length, Mode mode) throws Exceptio
 	            							dc++;
 	            							ddd++;
 	            						}
+	        	
+	            					else if(temp.equalsIgnoreCase(ered))
+            						{
+
+            							e.set(Integer.toString(ec),val);
+            							ec++;
+            							eee++;
+            						}
+
 
 	        }
             System.out.println("End");
@@ -183,7 +240,11 @@ public static String generateRandomString(int length, Mode mode) throws Exceptio
 			csvOutput.write(Integer.toString(ddd));
 			csvOutput.endRecord();
 
+			csvOutput.write("6392");
+			csvOutput.write(Integer.toString(eee));
+			csvOutput.endRecord();
 
+			
 	        csvOutput.close();
 	}
 
